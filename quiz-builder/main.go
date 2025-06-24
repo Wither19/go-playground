@@ -63,7 +63,7 @@ func main() {
 		fmt.Scanln(&answer)
 		fmt.Println()
 
-		fmt.Printf("Q: %v\nA: %v\n\nConfirm question? (y/n) ", question, answer)
+		fmt.Print("Confirm question? (y/n) ")
 		fmt.Scanln(&addQuestion)
 		fmt.Println()
 
