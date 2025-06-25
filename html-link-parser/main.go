@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 	"slices"
@@ -20,17 +19,17 @@ func main() {
 	if (htmlOpenErr != nil) {
 		log.Fatal(htmlOpenErr)
 	}
-	htmlDoc := string(htmlOpen)
 
-	parsedDoc, parseErr := html.Parse(strings.NewReader(htmlDoc))
-
+	parsedDoc, parseErr := html.Parse(strings.NewReader(string(htmlOpen)))
 	if (parseErr != nil) {
 		log.Fatal(parseErr)
 	}
 
 	for t := range parsedDoc.Descendants() {
-		if (slices.Contains(t.Attr, html.Attribute{ Key: "href" })) {
-			fmt.Println("yes")
+		if (slices.ContainsFunc(t.Attr, func(a html.Attribute) bool {
+			return a.Key == "href"
+		})) {
+			// Only executes for tags with "href" attributes
 		}
 	}
 }
