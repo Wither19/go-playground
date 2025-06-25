@@ -37,10 +37,26 @@ func main() {
 
 	}
 
+	var confirmOverwrite string
+	quizPath, quizPathErr := os.Stat(quizFileName)
+	if (quizPathErr != nil) {
+
+	} else {
+		fmt.Printf("%v already exists in this directory. Would you like to overwrite it? (y/n) ", quizPath.Name())
+		fmt.Scanln(&confirmOverwrite)
+
+		if (!ynConfirm(confirmOverwrite)) {
+			fmt.Println("Exiting...")
+			os.Exit(0)
+		}
+	}
+
 	// Create the file
 	newQuizFile, quizFileErr := os.Create(quizFileName)
 	if (quizFileErr != nil) {
 		log.Fatal(quizFileErr)
+	} else if (ynConfirm(confirmOverwrite)) {
+		fmt.Printf("%v successfully overwritten\n", quizFileName)
 	} else {
 		fmt.Printf("%v successfully created\n", quizFileName)
 	}
@@ -91,7 +107,13 @@ func main() {
 	} 
 	// Post-loop, flush the records to the csv and close it
 	quizWriter.Flush()
-	fmt.Printf("%d Questions successfully written to %v\n", recordCount, newQuizFile.Name())
+	qString := "questions"
+
+	if (recordCount == 1) {
+		qString = "question"
+	}
+
+	fmt.Printf("%d %v successfully written to %v\n", recordCount, qString, quizFileName)
 
 	defer newQuizFile.Close()
 }
