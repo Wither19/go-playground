@@ -37,6 +37,7 @@ func main() {
 
 	}
 
+	// If the file about to be made already exists, the program will ask if the user wants to overwrite it, if not the program will instead exits
 	var confirmOverwrite string
 	quizPath, quizPathErr := os.Stat(quizFileName)
 	if (quizPathErr != nil) {
@@ -67,6 +68,7 @@ func main() {
 	// The condition that allows for adding questions
 	questionAdding := true
 
+	// Keeps the number of questions due to be written to the CSV
 	recordCount := 0
 
 	var question string
