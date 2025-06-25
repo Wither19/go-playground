@@ -41,6 +41,8 @@ func main() {
 	newQuizFile, quizFileErr := os.Create(quizFileName)
 	if (quizFileErr != nil) {
 		log.Fatal(quizFileErr)
+	} else {
+		fmt.Printf("%v successfully created\n", quizFileName)
 	}
 
 	// Initialize a csv writer
@@ -49,6 +51,8 @@ func main() {
 	// The condition that allows for adding questions
 	questionAdding := true
 
+	recordCount := 0
+
 	var question string
 	var answer string
 
@@ -56,7 +60,7 @@ func main() {
 		// Get the question and its associated answer from user input
 		var addQuestion string
 		var addAnother string
-		fmt.Print("Question: ")
+		fmt.Printf("Question %d: ", recordCount + 1)
 		fmt.Scanln(&question)
 
 		fmt.Print("Answer: ")
@@ -71,6 +75,8 @@ func main() {
 		if (ynConfirm(addQuestion)) {
 			questionSet := []string{question, answer}
 			quizWriter.Write(questionSet)
+
+			recordCount += 1
 		}
 
 		// Asks if the user would like to continue the loop and add another question.
@@ -85,7 +91,7 @@ func main() {
 	} 
 	// Post-loop, flush the records to the csv and close it
 	quizWriter.Flush()
-	fmt.Printf("Questions successfully written to %v\n", newQuizFile.Name())
+	fmt.Printf("%d Questions successfully written to %v\n", recordCount, newQuizFile.Name())
 
 	defer newQuizFile.Close()
 }
