@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"slices"
@@ -30,6 +31,7 @@ func main() {
 			return a.Key == "href"
 		})) {
 			// Only executes for tags with "href" attributes
+			fmt.Printf("\n")
 		}
 	}
 }
