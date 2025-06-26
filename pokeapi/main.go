@@ -3,15 +3,25 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/mtslzr/pokeapi-go"
 )
 
+func capitalize(s string) string {
+	return fmt.Sprintf("%v%v", strings.ToUpper(string(s[0])), s[1:])
+}
+
 func main() {
-	natlDex, dexFetchErr := pokeapi.Pokedex("national")
-	if (dexFetchErr != nil) {
-		log.Fatal(dexFetchErr)
+	var dexNum string
+	fmt.Print("Get info on a Pokémon by its Pokédex # ")
+	fmt.Scanln(&dexNum)
+
+	pkmn, pkmnErr := pokeapi.Pokemon(dexNum)
+	if (pkmnErr != nil) {
+		log.Fatalln(pkmnErr)
 	}
 
-	fmt.Println(natlDex.PokemonEntries[250].PokemonSpecies.Name)
+	fmt.Printf("#%d %v\n", pkmn.ID, capitalize(pkmn.Name))
+	fmt.Print("Types: ")
 }
