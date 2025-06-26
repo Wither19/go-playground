@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			h1 {
+				text-align: center;
+			}
+
+			p {
+				line-height: 130%;
+				margin: 10px;
+			}
+		</style>
+		<title>{{.Title}}</title>
+	</head>
+	<body>
+		<div class="container">
+			<h1>{{.Title}}</h1>
+		
+			{{ range $paragraph := .Story}}
+			<p>{{$paragraph}}</p>
+			{{ end}}
+		</div>
+	</body>
+</html>

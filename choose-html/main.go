@@ -30,7 +30,7 @@ type Chapter struct {
 
 type Story map[string]Chapter
 
-	fileName := flag.String("file", "gopher.json", "The JSON file for the story")
+	fileName := flag.String("file", "./gopher.json", "The JSON file for the story")
 	flag.Parse()
 
 	storyJson, jsonErr := os.Open(*fileName)
@@ -43,11 +43,9 @@ type Story map[string]Chapter
 	if err := decodedStory.Decode(&story); err != nil {
 		log.Fatal(err)
 	}
-	
-
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		parseTemplate("thingy.html").Execute(w, story["intro"])
+		parseTemplate("temp.html").Execute(w, story["intro"])
 	})
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	http.ListenAndServe(":8080", nil)
 }
