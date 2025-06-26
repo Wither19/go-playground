@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			.pkmn-label {
+				text-transform: capitalize;
+			}
+		</style>
+		<title>Document</title>
+	</head>
+	<body>
+		<div class="container">
+			{{ range $pkmn := .PokemonEntries }}
+			<div>
+				<a href="pkmn/{{$pkmn.EntryNumber}}" class="pkmn-label"
+					>#{{ $pkmn.EntryNumber }} {{ $pkmn.PokemonSpecies.Name }}</a
+				>
+			</div>
+			{{ end }}
+		</div>
+	</body>
 </html>
