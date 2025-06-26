@@ -38,9 +38,8 @@ type Chapter struct {
 	}
 
 	for _, chapter := range story {
-		url := fmt.Sprintf("/%v", chapter.Reference)
-		
-		http.HandleFunc(url, func(w http.ResponseWriter, r *http.Request) {
+				
+		http.HandleFunc(fmt.Sprintf("/%v", chapter.Reference), func(w http.ResponseWriter, r *http.Request) {
 			template.Must(template.ParseFiles("temp.html")).Execute(w, chapter)
 		})
 	}
