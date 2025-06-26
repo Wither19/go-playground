@@ -12,19 +12,15 @@ import (
 
 func main() {
 
-type Option struct {
-	Text string `json:"text"`
-	Chapter  string `json:"arc"`
-}
-
 type Chapter struct {
 	Title   string   `json:"title"`
 	Reference string `json:"reference"`
 	Story   []string `json:"story"`
-	Options []Option `json:"options"`
+	Options []struct {
+		Text string `json:"text"`
+		Chapter  string `json:"arc"`
+	} `json:"options"`
 }
-
-type Story map[string]Chapter
 
 	fileName := flag.String("file", "./gopher.json", "The JSON file for the story")
 	flag.Parse()
@@ -34,14 +30,16 @@ type Story map[string]Chapter
 		log.Fatal(jsonErr)
 	}
 
+	var story map[string]Chapter
+
 	decodedStory := json.NewDecoder(storyJson)
-	var story Story
 	if err := decodedStory.Decode(&story); err != nil {
 		log.Fatal(err)
 	}
 
 	for _, chapter := range story {
 		url := fmt.Sprintf("/%v", chapter.Reference)
+		
 		http.HandleFunc(url, func(w http.ResponseWriter, r *http.Request) {
 			template.Must(template.ParseFiles("temp.html")).Execute(w, chapter)
 		})
