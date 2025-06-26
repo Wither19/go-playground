@@ -1,16 +1,18 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"net/http"
-	"text/template"
 
-	"github.com/mtslzr/pokeapi-go"
-	"github.com/mtslzr/pokeapi-go/structs"
+	"github.com/JoshGuarino/PokeGo/pkg/resources/games"
+	"github.com/JoshGuarino/PokeGo/pkg/resources/pokemon"
 )
 
 func main() {
-	dex, dexErr := pokeapi.Pokedex("national")
+	game := games.NewGamesGroup()
+	
+	dex, dexErr := game.GetPokedex("national")
 	if (dexErr != nil) {
 		log.Fatalln(dexErr)
 	}
@@ -23,16 +25,18 @@ func main() {
 		pkmnNum := r.PathValue("num")
 
 		type PkmnData struct {
-			Pokemon structs.Pokemon
-			PokemonSpecies structs.PokemonSpecies
+			Pokemon any
+			PokemonSpecies any
 		}
+		
+		pkmn := pokemon.NewPokemonGroup()
 
-		p, pErr := pokeapi.Pokemon(pkmnNum)
+		p, pErr := pkmn.GetPokemon(pkmnNum)
 		if (pErr != nil) {
 			log.Fatalln(pErr)
 		}
 
-		s, sErr := pokeapi.PokemonSpecies(pkmnNum)
+		s, sErr := pkmn.GetPokemonSpecies(pkmnNum)
 		if (sErr != nil) {
 			log.Fatalln(sErr)
 		}
