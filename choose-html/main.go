@@ -13,12 +13,12 @@ import (
 func main() {
 
 type Chapter struct {
-	Title   string   `json:"title"`
+	Title   	string   `json:"title"`
 	Reference string `json:"reference"`
 	Story   []string `json:"story"`
 	Options []struct {
-		Text string `json:"text"`
-		Chapter  string `json:"arc"`
+		Text 		 	string `json:"text"`
+		Chapter  	string `json:"arc"`
 	} `json:"options"`
 }
 
@@ -38,7 +38,7 @@ type Chapter struct {
 	}
 
 	for _, chapter := range story {
-				
+
 		http.HandleFunc(fmt.Sprintf("/%v", chapter.Reference), func(w http.ResponseWriter, r *http.Request) {
 			template.Must(template.ParseFiles("temp.html")).Execute(w, chapter)
 		})
