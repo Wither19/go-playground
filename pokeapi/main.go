@@ -6,6 +6,7 @@ import (
 	"text/template"
 
 	"github.com/mtslzr/pokeapi-go"
+	"github.com/mtslzr/pokeapi-go/structs"
 )
 
 func main() {
@@ -22,8 +23,8 @@ func main() {
 		pkmnNum := r.PathValue("num")
 
 		type PkmnData struct {
-			Pokemon any
-			Species any
+			Pokemon structs.Pokemon
+			Species structs.PokemonSpecies
 		}
 
 		p, pErr := pokeapi.Pokemon(pkmnNum)
@@ -37,7 +38,7 @@ func main() {
 		}
 
 
-		template.Must(template.ParseFiles("pkmn.html")).Execute(w, p)
+		template.Must(template.ParseFiles("pkmn.html")).Execute(w, PkmnData{p, s})
 	})
 
 	http.ListenAndServe(":8080", nil)
