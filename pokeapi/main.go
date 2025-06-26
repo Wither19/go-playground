@@ -24,7 +24,7 @@ func main() {
 
 		type PkmnData struct {
 			Pokemon structs.Pokemon
-			Species structs.PokemonSpecies
+			PokemonSpecies structs.PokemonSpecies
 		}
 
 		p, pErr := pokeapi.Pokemon(pkmnNum)
@@ -37,8 +37,9 @@ func main() {
 			log.Fatalln(sErr)
 		}
 
+		data := PkmnData{Pokemon: p, PokemonSpecies: s}
 
-		template.Must(template.ParseFiles("pkmn.html")).Execute(w, PkmnData{p, s})
+		template.Must(template.ParseFiles("pkmn.html")).Execute(w, data)
 	})
 
 	http.ListenAndServe(":8080", nil)
