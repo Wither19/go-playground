@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"strings"
+	"text/template"
 
 	"github.com/mtslzr/pokeapi-go"
 )
@@ -13,15 +15,14 @@ func capitalize(s string) string {
 }
 
 func main() {
-	var dexNum string
-	fmt.Print("Get info on a Pokémon by its Pokédex # ")
-	fmt.Scanln(&dexNum)
-
-	pkmn, pkmnErr := pokeapi.Pokemon(dexNum)
-	if (pkmnErr != nil) {
-		log.Fatalln(pkmnErr)
+	dex, dexErr := pokeapi.Pokedex("national")
+	if (dexErr != nil) {
+		log.Fatalln(dexErr)
 	}
 
-	fmt.Printf("#%d %v\n", pkmn.ID, capitalize(pkmn.Name))
-	fmt.Print("Types: ")
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		template.Must(template.ParseFiles("main.html")).Execute(w, dex.PokemonEntries)
+	})
+
+	http.ListenAndServe(":8080", nil)
 }
