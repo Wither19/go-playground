@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+			h1 {
+				text-align: center;
+			}
+
+			p {
+				line-height: 130%;
+				margin: 10px;
+			}
+
+			.options {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-evenly;
+			}
+
+			.options > a {
+				cursor: pointer;
+				user-select: none;
+			}
+
+			a:hover, a:hover button {
+				color: slateblue
+			}
+		</style>
+		<title>{{.Title}}</title>
+	</head>
+	<body>
+		<div class="container">
+			{{ if .Reference ne "intro" }}
+				<a href="/intro">
+					<button>&lt; Back to start</button>
+				</a>
+			{{end}}
+
+			<h1>{{.Title}}</h1>
+		
+			<div class="story">
+				{{ range $paragraph := .Story}}
+				<p>{{$paragraph}}</p>
+				{{ end}}
+			</div>
+
+			<div class="options">
+				{{range $option := .Options}}
+				<a href="{{$option.Chapter}}">
+					<button>{{$option.Text}}</button>
+				</a>
+				{{end}}
+			</div>
+		</div>
+	</body>
+</html>

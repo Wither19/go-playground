@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -24,6 +25,7 @@ type Option struct {
 
 type Chapter struct {
 	Title   string   `json:"title"`
+	Reference string `json:"reference"`
 	Story   []string `json:"story"`
 	Options []Option `json:"options"`
 }
@@ -44,8 +46,12 @@ type Story map[string]Chapter
 		log.Fatal(err)
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		parseTemplate("temp.html").Execute(w, story["intro"])
-	})
+	for _, chapter := range story {
+		url := fmt.Sprintf("/%v", chapter.Reference)
+		http.HandleFunc(url, func(w http.ResponseWriter, r *http.Request) {
+			parseTemplate("temp.html.tmpl").Execute(w, chapter)
+		})
+	}
+
 	http.ListenAndServe(":8080", nil)
 }
