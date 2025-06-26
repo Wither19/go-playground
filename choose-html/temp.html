@@ -32,11 +32,11 @@
 	</head>
 	<body>
 		<div class="container">
-			{{ if .Reference ne "intro" }}
+			{{ if ne .Reference "intro" }}
 				<a href="/intro">
 					<button>&lt; Back to start</button>
 				</a>
-			{{end}}
+			{{ end }}
 
 			<h1>{{.Title}}</h1>
 		
