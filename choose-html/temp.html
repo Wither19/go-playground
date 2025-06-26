@@ -24,8 +24,9 @@
 				user-select: none;
 			}
 
-			a:hover, a:hover button {
-				color: slateblue
+			a:hover,
+			a:hover button {
+				color: slateblue;
 			}
 		</style>
 		<title>{{.Title}}</title>
@@ -33,13 +34,13 @@
 	<body>
 		<div class="container">
 			{{ if ne .Reference "intro" }}
-				<a href="/intro">
-					<button>&lt; Back to start</button>
-				</a>
+			<a href="/intro">
+				<button>&lt; Back to start</button>
+			</a>
 			{{ end }}
 
 			<h1>{{.Title}}</h1>
-		
+
 			<div class="story">
 				{{ range $paragraph := .Story}}
 				<p>{{$paragraph}}</p>
