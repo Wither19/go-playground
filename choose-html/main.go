@@ -10,12 +10,6 @@ import (
 	"os"
 )
 
-func parseTemplate(filename string) *template.Template {
-	tmpl := template.Must(template.ParseFiles(filename))
-	
-	return tmpl
-}
-
 func main() {
 
 type Option struct {
@@ -49,7 +43,7 @@ type Story map[string]Chapter
 	for _, chapter := range story {
 		url := fmt.Sprintf("/%v", chapter.Reference)
 		http.HandleFunc(url, func(w http.ResponseWriter, r *http.Request) {
-			parseTemplate("temp.html").Execute(w, chapter)
+			template.Must(template.ParseFiles("temp.html")).Execute(w, chapter)
 		})
 	}
 
