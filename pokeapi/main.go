@@ -21,11 +21,10 @@ func main() {
 	http.HandleFunc("/pkmn/{num}", func(w http.ResponseWriter, r *http.Request) {
 		pkmnNum := r.PathValue("num")
 
-		type PkmnData struct { 
+		type PkmnData struct {
 			Pokemon any
 			Species any
 		}
-
 
 		p, pErr := pokeapi.Pokemon(pkmnNum)
 		if (pErr != nil) {
@@ -37,13 +36,8 @@ func main() {
 			log.Fatalln(sErr)
 		}
 
-		data := PkmnData{
-			Pokemon: p,
-			Species: s,
-		}
 
-
-		template.Must(template.ParseFiles("pkmn.html")).Execute(w, data)
+		template.Must(template.ParseFiles("pkmn.html")).Execute(w, p)
 	})
 
 	http.ListenAndServe(":8080", nil)
