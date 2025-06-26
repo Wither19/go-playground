@@ -49,7 +49,7 @@ type Story map[string]Chapter
 	for _, chapter := range story {
 		url := fmt.Sprintf("/%v", chapter.Reference)
 		http.HandleFunc(url, func(w http.ResponseWriter, r *http.Request) {
-			parseTemplate("temp.html.tmpl").Execute(w, chapter)
+			parseTemplate("temp.html").Execute(w, chapter)
 		})
 	}
 
