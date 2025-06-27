@@ -9,6 +9,10 @@ import (
 	"github.com/JoshGuarino/PokeGo/pkg/resources/pokemon"
 )
 
+func parseTemp(f string) *template.Template {
+	return template.Must(template.ParseFiles(f))
+}
+
 func main() {
 	game := games.NewGamesGroup()
 	
@@ -43,7 +47,7 @@ func main() {
 
 		data := PkmnData{Pokemon: p, PokemonSpecies: s}
 
-		template.Must(template.ParseFiles("pkmn.html")).Execute(w, data)
+		parseTemp("pkmn.html").Execute(w, data)
 	})
 
 	http.ListenAndServe(":8080", nil)
