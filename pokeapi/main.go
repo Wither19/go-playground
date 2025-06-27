@@ -22,7 +22,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	http.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
-		template.Must(template.ParseFiles("main.html")).Execute(w, dex)
+		template.Must(template.ParseFiles("main.html")).Execute(w, dex.PokemonEntries)
 	})
 
 	http.HandleFunc("/pkmn/{num}", func(w http.ResponseWriter, r *http.Request) {
