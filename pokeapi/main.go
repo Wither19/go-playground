@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/mtslzr/pokeapi-go"
+	"github.com/mtslzr/pokeapi-go/structs"
 )
 
 func parseTemp(f string) *template.Template {
@@ -20,7 +21,7 @@ func main() {
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
 		template.Must(template.ParseFiles("main.html")).Execute(w, dex)
 	})
 
@@ -28,8 +29,8 @@ func main() {
 		pkmnNum := r.PathValue("num")
 
 		type PkmnData struct {
-			Pokemon any
-			PokemonSpecies any
+			Pokemon structs.Pokemon
+			PokemonSpecies structs.PokemonSpecies
 		}
 		
 		p, pErr := pokeapi.Pokemon(pkmnNum)
