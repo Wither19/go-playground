@@ -21,6 +21,8 @@ func main() {
 		log.Fatalln(dexErr)
 	}
 
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		template.Must(template.ParseFiles("main.html")).Execute(w, dex)
 	})

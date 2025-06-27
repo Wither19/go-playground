@@ -1,0 +1,12 @@
+:root {
+  font-family: sans-serif;
+}
+
+h1 {
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.pkmn-label {
+  text-transform: capitalize;
+}
