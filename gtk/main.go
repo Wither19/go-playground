@@ -21,6 +21,11 @@ func main() {
 		gtk.MainQuit()
 	})
 
+	mainBox, err := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 3)
+	if (err != nil) {
+		log.Fatal(err)
+	}
+
 	// Create a new label widget to show in the window.
 	l, err := gtk.LabelNew("Hello, gotk3!")
 	if err != nil {
@@ -28,7 +33,9 @@ func main() {
 	}
 
 	// Add the label to the window.
-	win.Add(l)
+	mainBox.Add(l)
+
+	win.Add(mainBox)
 
 	// Set the default window size.
 	win.SetDefaultSize(800, 600)
