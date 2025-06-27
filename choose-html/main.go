@@ -37,6 +37,10 @@ type Chapter struct {
 		log.Fatal(err)
 	}
 
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		template.Must(template.ParseFiles("redir.html")).Execute(w, nil)
+	})
+
 	for _, chapter := range story {
 
 		http.HandleFunc(fmt.Sprintf("/%v", chapter.Reference), func(w http.ResponseWriter, r *http.Request) {
