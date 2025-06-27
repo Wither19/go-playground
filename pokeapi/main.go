@@ -5,8 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/JoshGuarino/PokeGo/pkg/resources/games"
-	"github.com/JoshGuarino/PokeGo/pkg/resources/pokemon"
+	"github.com/mtslzr/pokeapi-go"
 )
 
 func parseTemp(f string) *template.Template {
@@ -14,9 +13,7 @@ func parseTemp(f string) *template.Template {
 }
 
 func main() {
-	game := games.NewGamesGroup()
-	
-	dex, dexErr := game.GetPokedex("national")
+	dex, dexErr := pokeapi.Pokedex("national")
 	if (dexErr != nil) {
 		log.Fatalln(dexErr)
 	}
@@ -35,14 +32,12 @@ func main() {
 			PokemonSpecies any
 		}
 		
-		pkmn := pokemon.NewPokemonGroup()
-
-		p, pErr := pkmn.GetPokemon(pkmnNum)
+		p, pErr := pokeapi.Pokemon(pkmnNum)
 		if (pErr != nil) {
 			log.Fatalln(pErr)
 		}
 
-		s, sErr := pkmn.GetPokemonSpecies(pkmnNum)
+		s, sErr := pokeapi.PokemonSpecies(pkmnNum)
 		if (sErr != nil) {
 			log.Fatalln(sErr)
 		}
