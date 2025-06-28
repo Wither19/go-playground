@@ -7,16 +7,14 @@ import (
 )
 
 func main() {
-	// Initialize GTK without parsing any command line arguments.
 	gtk.Init(nil)
 
-	// Create a new toplevel window, set its title, and connect it to the
-	// "destroy" signal to exit the GTK main loop when it is destroyed.
 	win, err := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
 	if err != nil {
 		log.Fatal("Unable to create window:", err)
 	}
 	win.SetTitle("Simple Example")
+	
 	win.Connect("destroy", func() {
 		gtk.MainQuit()
 	})
