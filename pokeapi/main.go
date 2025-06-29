@@ -14,13 +14,13 @@ func parseTemp(f string) *template.Template {
 }
 
 func mainPageHandle(w http.ResponseWriter, r *http.Request) {
-	dex, dexErr := http.Get("https://pokeapi.co/api/v2/pokedex/1/")
+	dex, dexErr := pokeapi.Pokedex("national")
 	if (dexErr != nil) {
 		log.Fatalln("Dex error:", dexErr)
 	}
 
 
-	parseTemp("main.html").Execute(w, dex)
+	parseTemp("main.html").Execute(w, dex.PokemonEntries)
 
 }
 
