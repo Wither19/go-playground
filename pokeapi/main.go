@@ -19,7 +19,7 @@ func mainPageHandle(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(dexErr)
 	}
 
-	template.Must(template.ParseFiles("main.html")).Execute(w, dex.PokemonEntries)
+	parseTemp("main.html").Execute(w, dex.PokemonEntries)
 }
 
 func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
@@ -29,20 +29,27 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 		Pokemon structs.Pokemon
 		PokemonSpecies structs.PokemonSpecies
 	}
-	
+	 
 	p, pErr := pokeapi.Pokemon(pkmnNum)
+	
 	if (pErr != nil) {
 		log.Fatalln(pErr)
 	}
 
 	s, sErr := pokeapi.PokemonSpecies(pkmnNum)
+
 	if (sErr != nil) {
 		log.Fatalln(sErr)
 	}
 
-	data := PkmnData{Pokemon: p, PokemonSpecies: s}
+	if (pErr == nil && sErr == nil) {
+		data := PkmnData{Pokemon: p, PokemonSpecies: s}
 
-	parseTemp("pkmn.html").Execute(w, data)
+		parseTemp("pkmn.html").Execute(w, data)
+	} else {
+		http.Redirect(w, r, "/home", http.StatusNotFound)
+	}
+
 }
 
 func main() {
