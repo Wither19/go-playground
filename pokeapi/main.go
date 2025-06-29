@@ -2,6 +2,7 @@ package main
 
 import (
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 
@@ -14,12 +15,15 @@ func parseTemp(f string) *template.Template {
 }
 
 func mainPageHandle(w http.ResponseWriter, r *http.Request) {
-	dex, dexErr := pokeapi.Pokedex("national")
+	dex, dexErr := http.Get("https://pokeapi.co/api/v2/pokedex/1/")
 	if (dexErr != nil) {
-		log.Fatalln(dexErr)
+		log.Fatalln("Dex error:", dexErr)
 	}
 
-	parseTemp("main.html").Execute(w, dex.PokemonEntries)
+	readDex, err := io.ReadAll(dex.Body)
+
+	parseTemp("main.html").Execute(w, dex)
+	defer dex.Body.Close()
 }
 
 func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
@@ -33,13 +37,13 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 	p, pErr := pokeapi.Pokemon(pkmnNum)
 	
 	if (pErr != nil) {
-		log.Fatalln(pErr)
+		log.Fatalln("Pokemon error:", pErr)
 	}
 
 	s, sErr := pokeapi.PokemonSpecies(pkmnNum)
 
 	if (sErr != nil) {
-		log.Fatalln(sErr)
+		log.Fatalln("Species error:", sErr)
 	}
 
 	if (pErr == nil && sErr == nil) {
