@@ -2,7 +2,6 @@ package main
 
 import (
 	"html/template"
-	"io"
 	"log"
 	"net/http"
 
@@ -20,10 +19,9 @@ func mainPageHandle(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln("Dex error:", dexErr)
 	}
 
-	readDex, err := io.ReadAll(dex.Body)
 
 	parseTemp("main.html").Execute(w, dex)
-	defer dex.Body.Close()
+
 }
 
 func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
