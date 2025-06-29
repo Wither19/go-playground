@@ -19,7 +19,6 @@ func mainPageHandle(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln("Dex error:", dexErr)
 	}
 
-
 	parseTemp("main.html").Execute(w, dex.PokemonEntries)
 
 }
