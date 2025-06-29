@@ -50,3 +50,5 @@ async function createAPIObj() {
   }
   console.log(pkmnData)
 }
+
+createAPIObj();
