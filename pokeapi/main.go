@@ -60,6 +60,6 @@ func main() {
 	http.HandleFunc("/home", mainPageHandle)
 	http.HandleFunc("/pkmn/{num}", pkmnLoadfunc)
 
-	http.ListenAndServe("localhost:8080", nil)
+	http.ListenAndServe(":8080", nil)
 }
 
