@@ -102,16 +102,12 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.Handle("/static/", http.FileServer(http.Dir("./styles")))
-
 	sassFile, err := os.Open("./styles/style.scss")
-
 	if (err != nil) {
 		log.Fatalln("Sass file open error:", err)
 	}
 
 	newCSS, err := os.Create("./styles/style.css")
-
 	if (err != nil) {
 		log.Fatalln("CSS file creation error:", err)
 	}
@@ -125,9 +121,11 @@ func main() {
 		log.Fatalln("Sass compile error:", err)
 	}
 
-	http.HandleFunc("/", mainPageHandle)
-	http.HandleFunc("/pkmn/{id}", pkmnLoadfunc)
+	// http.Handle("/static/", http.FileServer(http.Dir("./styles")))
 
-	http.ListenAndServe(":8080", nil)
+	// http.HandleFunc("/", mainPageHandle)
+	// http.HandleFunc("/pkmn/{id}", pkmnLoadfunc)
+
+	// http.ListenAndServe(":8080", nil)
 }
 
