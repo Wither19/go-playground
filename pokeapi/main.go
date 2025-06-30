@@ -24,6 +24,18 @@ func leadingZeroes(num int, length int) string {
 	return fmt.Sprintf("%0*d", length, num)
 }
 
+func serverSassComp(verbose bool) {
+	sassSource := "./static/scss/App.scss"
+	newCss := "./static/css/style.css"
+	sassBuild := exec.Command("sass", sassSource, newCss, "--no-source-map")
+
+	if err := sassBuild.Run(); err != nil {
+		log.Fatalln("Sass build error:", err)
+	} else if (verbose) {
+		fmt.Printf("Sass successfully transpiled at %v\n", newCss)
+	}
+}
+
 func getNatlDex() structs.Pokedex {
 	dexURL := getAPILink("pokedex", "1")
 
@@ -85,6 +97,8 @@ func getPkmnSpecies(id string) structs.PokemonSpecies {
 func mainPageHandle(w http.ResponseWriter, r *http.Request) {
 	d := getNatlDex().PokemonEntries
 
+	serverSassComp(false)
+
 	parseTemp("main.html").Execute(w, d)
 }
 
@@ -102,20 +116,14 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 
 	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species, PaddedID: leadingZeroes(pkmn.ID, 4)}
 
+	serverSassComp(false)
+
 	parseTemp("pkmn.html").Execute(w, data)
 
 }
 
 func main() {
-	sassSource := "./static/scss/App.scss"
-	newCss := "./static/css/style.css"
-	sassBuild := exec.Command("sass", sassSource, newCss, "--no-source-map")
-
-	if err := sassBuild.Run(); err != nil {
-		log.Fatalln("Sass build error:", err)
-	} else {
-		fmt.Printf("Sass successfully transpiled at %v\n", newCss)
-	}
+	serverSassComp(true)
 	
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
