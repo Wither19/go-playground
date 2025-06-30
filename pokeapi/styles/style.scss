@@ -1,0 +1,33 @@
+:root {
+	font-family: sans-serif;
+}
+
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+}
+
+.pkmn-entry {
+	flex-basis: 33%;
+	text-align: center;
+	color: black;
+	background-color: white;
+	text-transform: capitalize;
+	text-decoration: none;
+	color: darkblue;
+}
+
+.pkmn-entry:hover {
+	background-color: slateblue;
+}
+
+h1 {
+	text-align: center;
+	text-transform: capitalize;
+}
+
+span {
+	display: block;
+	text-align: center;
+}

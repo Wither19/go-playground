@@ -3,41 +3,18 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<!-- <link rel="stylesheet" href="style.css" /> -->
-		<style>
-			:root {
-				font-family: sans-serif;
-			}
-
-			h1 {
-				text-align: center;
-				text-transform: capitalize;
-			}
-
-			.container {
-				display: flex;
-				flex-wrap: wrap;
-				justify-content: space-evenly;
-			}
-
-			.pkmn-entry {
-				
-			}
-
-			.pkmn-label {
-				text-transform: capitalize;
-			}
-		</style>
+		<link rel="stylesheet" href="/static/style.css" />
 		<title>Document</title>
 	</head>
 	<body>
 		<div class="container">
 			{{ range $pkmn := . }}
-			<div class="pkmn-entry">
-				<a href="pkmn/{{$pkmn.EntryNumber}}" class="pkmn-label"
-					>#{{ $pkmn.EntryNumber }} {{ $pkmn.PokemonSpecies.Name }}</a
-				>
-			</div>
+			<a href="pkmn/{{$pkmn.EntryNumber}}" class="pkmn-entry">
+				<img
+					src="https://img.pokemondb.net/sprites/scarlet-violet/icon/avif/{{ $pkmn.PokemonSpecies.Name }}.avif"
+					alt="{{ $pkmn.PokemonSpecies.Name }}" />
+				#{{ $pkmn.EntryNumber }} {{ $pkmn.PokemonSpecies.Name }}
+			</a>
 			{{ end }}
 		</div>
 	</body>
