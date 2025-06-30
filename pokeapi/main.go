@@ -10,6 +10,7 @@ import (
 	"os/exec"
 
 	"github.com/mtslzr/pokeapi-go/structs"
+	"github.com/samber/lo"
 )
 
 func parseTemp(f string) *template.Template {
@@ -105,16 +106,32 @@ func mainPageHandle(w http.ResponseWriter, r *http.Request) {
 func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 	pkmnID := r.PathValue("id")
 
+	type Genus struct{
+		Genus string "json:\"genus\""; 
+		Language struct{
+			Name string "json:\"name\"";
+			URL string "json:\"url\""
+		} "json:\"language\""
+	}
+
 	type PkmnData struct {
 		Pokemon structs.Pokemon
 		PokemonSpecies structs.PokemonSpecies
 		PaddedID string
+		EnglishGenus Genus
 	}
 
 	pkmn := getPkmn(pkmnID)
 	species := getPkmnSpecies(pkmnID)
 
-	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species, PaddedID: leadingZeroes(pkmn.ID, 4)}
+	paddedID := leadingZeroes(pkmn.ID, 4)
+
+	var engGenus Genus
+	engGenus = lo.PickBy(species.Genera, func(k string, v Genus) bool {
+		return v.Language.Name == "en"
+	})
+
+	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species, PaddedID: paddedID, EnglishGenus: engGenus}
 
 	serverSassComp(false)
 
