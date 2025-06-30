@@ -94,13 +94,13 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 	type PkmnData struct {
 		Pokemon structs.Pokemon
 		PokemonSpecies structs.PokemonSpecies
-		paddedID string
+		PaddedID string
 	}
 
 	pkmn := getPkmn(pkmnID)
 	species := getPkmnSpecies(pkmnID)
 
-	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species, paddedID: leadingZeroes(pkmn.ID, 4)}
+	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species, PaddedID: leadingZeroes(pkmn.ID, 4)}
 
 	parseTemp("pkmn.html").Execute(w, data)
 
@@ -114,7 +114,7 @@ func main() {
 	if err := sassBuild.Run(); err != nil {
 		log.Fatalln("Sass build error:", err)
 	} else {
-		fmt.Println("Sass successfully transpiled")
+		fmt.Printf("Sass successfully transpiled at %v\n", newCss)
 	}
 	
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
@@ -122,8 +122,9 @@ func main() {
 	http.HandleFunc("/", mainPageHandle)
 	http.HandleFunc("/pkmn/{id}", pkmnLoadfunc)
 
-	fmt.Println("Server active")
+	serverPort := ":8080"
+	fmt.Printf("Server active at %v\n", serverPort)
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(serverPort, nil)
 }
 

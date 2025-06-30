@@ -77,17 +77,25 @@ sub {
   justify-content: space-between;
   margin: 12px auto;
 }
-.pkmn-list div {
+.pkmn-list > div {
   margin: 20px 8px;
   text-align: center;
   flex-basis: 20%;
   background-color: rgb(230, 245, 255);
+  text-transform: capitalize;
 }
-.pkmn-list div.special {
+.pkmn-list > div.special {
   background-color: rgb(250, 230, 240);
 }
-.pkmn-list div.unique {
+.pkmn-list > div.unique {
   background-color: rgb(240, 240, 220);
+}
+.pkmn-list .pkmn-entry, .pkmn-list .pkmn-entry:visited {
+  color: darkblue;
+  text-decoration: none;
+}
+.pkmn-list .pkmn-entry div:nth-of-type(2) {
+  padding-bottom: 12px;
 }
 
 .pkmn-name-header {

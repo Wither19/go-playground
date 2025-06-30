@@ -12,11 +12,14 @@
 			{{ range $pkmn := . }}
 			<div>
 				<a href="pkmn/{{$pkmn.EntryNumber}}" class="pkmn-entry">
+				<div>
 					<img
 					src="https://img.pokemondb.net/sprites/scarlet-violet/icon/avif/{{ $pkmn.PokemonSpecies.Name }}.avif"
 					alt="{{ $pkmn.PokemonSpecies.Name }}" />
-				#{{ $pkmn.EntryNumber }} {{ $pkmn.PokemonSpecies.Name }}
-				</a></div>
+				</div>
+				<div>#{{ $pkmn.EntryNumber }} {{ $pkmn.PokemonSpecies.Name }}</div>
+				</a>
+			</div>
 			{{ end }}
 		</div>
 		</div>
