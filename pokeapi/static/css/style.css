@@ -77,16 +77,16 @@ sub {
   justify-content: space-between;
   margin: 12px auto;
 }
-.pkmn-list > div {
+.pkmn-list div {
   margin: 20px 8px;
   text-align: center;
   flex-basis: 20%;
   background-color: rgb(230, 245, 255);
 }
-.pkmn-list > div.special {
+.pkmn-list div.special {
   background-color: rgb(250, 230, 240);
 }
-.pkmn-list > div.unique {
+.pkmn-list div.unique {
   background-color: rgb(240, 240, 220);
 }
 

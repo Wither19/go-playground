@@ -94,7 +94,7 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 	type PkmnData struct {
 		Pokemon structs.Pokemon
 		PokemonSpecies structs.PokemonSpecies
-		PaddedID string
+		paddedID string
 	}
 
 	pkmn := getPkmn(pkmnID)
