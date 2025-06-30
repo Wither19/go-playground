@@ -1,11 +1,13 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 
-	"github.com/mtslzr/pokeapi-go"
 	"github.com/mtslzr/pokeapi-go/structs"
 )
 
@@ -13,14 +15,28 @@ func parseTemp(f string) *template.Template {
 	return template.Must(template.ParseFiles(f))
 }
 
+func getAPILink(cat string, id string) string {
+	return fmt.Sprintf("api-data/data/api/v2/%v/%v/index.json", cat, id)
+}
+
 func mainPageHandle(w http.ResponseWriter, r *http.Request) {
-	dex, dexErr := pokeapi.Pokedex("national")
-	if (dexErr != nil) {
-		log.Fatalln("Dex error:", dexErr)
+	dexURL := getAPILink("pokedex", "1")
+
+	dex, err := os.ReadFile(dexURL)
+
+	if (err != nil) {
+		log.Fatalln("Dex error:", err)
 	}
 
-	parseTemp("main.html").Execute(w, dex.PokemonEntries)
+	var pokedex structs.Pokedex
 
+	dexUnpackErr := json.Unmarshal(dex, &pokedex)
+
+	if (dexUnpackErr != nil) {
+		log.Fatalln("Dex unpacking error:", err)
+	}
+
+	parseTemp("main.html").Execute(w, pokedex.PokemonEntries)
 }
 
 func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
@@ -30,14 +46,17 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 		Pokemon structs.Pokemon
 		PokemonSpecies structs.PokemonSpecies
 	}
-	 
-	p, pErr := pokeapi.Pokemon(pkmnNum)
-	
+	pURL := getAPILink("pokemon", pkmnNum)
+
+	p, pErr := os.ReadFile(pURL)
+
 	if (pErr != nil) {
 		log.Fatalln("Pokemon error:", pErr)
 	}
 
-	s, sErr := pokeapi.PokemonSpecies(pkmnNum)
+	sURL := getAPILink("pokemon-species", pkmnNum)
+	
+	s, sErr := os.ReadFile(sURL)
 
 	if (sErr != nil) {
 		log.Fatalln("Species error:", sErr)
