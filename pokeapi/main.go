@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/mtslzr/pokeapi-go/structs"
+	"github.com/wellington/go-libsass"
 )
 
 func parseTemp(f string) *template.Template {
@@ -102,6 +103,27 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.Handle("/static/", http.FileServer(http.Dir("./styles")))
+
+	sassFile, err := os.Open("./styles/style.scss")
+
+	if (err != nil) {
+		log.Fatalln("Sass file open error:", err)
+	}
+
+	newCSS, err := os.Create("./styles/style.css")
+
+	if (err != nil) {
+		log.Fatalln("CSS file creation error:", err)
+	}
+
+	sassCompile, err := libsass.New(newCSS, sassFile)
+	if (err != nil) {
+		log.Fatalln("Sass compiler setup error:", err)
+	}
+
+	if err := sassCompile.Run(); err != nil {
+		log.Fatalln("Sass compile error:", err)
+	}
 
 	http.HandleFunc("/", mainPageHandle)
 	http.HandleFunc("/pkmn/{id}", pkmnLoadfunc)
