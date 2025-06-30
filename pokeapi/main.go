@@ -101,7 +101,7 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/home", mainPageHandle)
+	http.HandleFunc("/", mainPageHandle)
 	http.HandleFunc("/pkmn/{id}", pkmnLoadfunc)
 
 	http.ListenAndServe(":8080", nil)
