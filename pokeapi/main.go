@@ -105,9 +105,8 @@ func main() {
 	sassSource := "./static/scss/App.scss"
 	newCss := "./static/css/style.css"
 	sassBuild := exec.Command("sass", sassSource, newCss, "--no-source-map")
-	err := sassBuild.Run()
-
-	if (err != nil) {
+	
+	if err := sassBuild.Run(); err != nil {
 		log.Fatalln("Sass build error:", err)
 	} else {
 		fmt.Println("Sass successfully transpiled")
