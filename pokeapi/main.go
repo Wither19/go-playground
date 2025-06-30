@@ -102,14 +102,18 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	sassBuild := exec.Command("sass", "./sass/style.scss", "./styles/style.css", "--no-source-map")
+	sassSource := "./static/sass/style.scss"
+	newCss := "./static/css/style.css"
+	sassBuild := exec.Command("sass", sassSource, newCss, "--no-source-map")
 	err := sassBuild.Run()
 
 	if (err != nil) {
 		log.Fatalln("Sass build error:", err)
+	} else {
+		fmt.Println("Sass successfully transpiled")
 	}
 
-	http.Handle("/static/", http.FileServer(http.Dir("./styles")))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	http.HandleFunc("/", mainPageHandle)
 	http.HandleFunc("/pkmn/{id}", pkmnLoadfunc)
