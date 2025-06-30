@@ -102,12 +102,12 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	sassFile, err := os.Open("./styles/style.scss")
+	sassFile, err := os.Open("styles/style.scss")
 	if (err != nil) {
 		log.Fatalln("Sass file open error:", err)
 	}
 
-	newCSS, err := os.Create("./styles/style.css")
+	newCSS, err := os.Create("styles/style.css")
 	if (err != nil) {
 		log.Fatalln("CSS file creation error:", err)
 	}
