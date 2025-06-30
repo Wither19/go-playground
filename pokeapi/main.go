@@ -102,7 +102,7 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	sassSource := "./static/sass/style.scss"
+	sassSource := "./static/scss/App.scss"
 	newCss := "./static/css/style.css"
 	sassBuild := exec.Command("sass", sassSource, newCss, "--no-source-map")
 	err := sassBuild.Run()

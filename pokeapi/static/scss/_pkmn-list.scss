@@ -1,0 +1,34 @@
+.pokedex-app-container {
+	margin: 24px 3%;
+	display: block;
+}
+
+.region-select {
+	margin: 16px;
+}
+
+.pkmn-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	margin: 12px auto;
+
+	$normal-card-color: rgb(230, 245, 255);
+	$special-card-color: rgb(250, 230, 240);
+	$unique-card-color: rgb(240, 240, 220);
+
+	& > div {
+		margin: 20px 8px;
+		text-align: center;
+		flex-basis: 20%;
+		background-color: $normal-card-color;
+
+		&.special {
+			background-color: $special-card-color;
+		}
+
+		&.unique {
+			background-color: $unique-card-color;
+		}
+	}
+}
