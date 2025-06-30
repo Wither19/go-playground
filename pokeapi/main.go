@@ -16,7 +16,7 @@ func parseTemp(f string) *template.Template {
 }
 
 func getAPILink(cat string, id string) string {
-	return fmt.Sprintf("api-data/data/api/v2/%v/%v/index.json", cat, id)
+	return fmt.Sprintf("api-data/%v/%v/index.json", cat, id)
 }
 
 func getNatlDex() structs.Pokedex {
