@@ -112,7 +112,7 @@ func main() {
 	} else {
 		fmt.Println("Sass successfully transpiled")
 	}
-
+	
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	http.HandleFunc("/", mainPageHandle)
