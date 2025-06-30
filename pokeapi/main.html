@@ -7,15 +7,18 @@
 		<title>Document</title>
 	</head>
 	<body>
-		<div class="container">
+		<div class="pokedex-app-container">
+			<div class="pkmn-list">
 			{{ range $pkmn := . }}
-			<a href="pkmn/{{$pkmn.EntryNumber}}" class="pkmn-entry">
-				<img
+			<div>
+				<a href="pkmn/{{$pkmn.EntryNumber}}" class="pkmn-entry">
+					<img
 					src="https://img.pokemondb.net/sprites/scarlet-violet/icon/avif/{{ $pkmn.PokemonSpecies.Name }}.avif"
 					alt="{{ $pkmn.PokemonSpecies.Name }}" />
 				#{{ $pkmn.EntryNumber }} {{ $pkmn.PokemonSpecies.Name }}
-			</a>
+				</a></div>
 			{{ end }}
+		</div>
 		</div>
 	</body>
 </html>

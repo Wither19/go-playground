@@ -20,6 +20,10 @@ func getAPILink(cat string, id string) string {
 	return fmt.Sprintf("api-data/%v/%v/index.json", cat, id)
 }
 
+func leadingZeroes(num int, length int) string {
+	return fmt.Sprintf("%0*d", length, num)
+}
+
 func getNatlDex() structs.Pokedex {
 	dexURL := getAPILink("pokedex", "1")
 
@@ -90,12 +94,13 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 	type PkmnData struct {
 		Pokemon structs.Pokemon
 		PokemonSpecies structs.PokemonSpecies
+		PaddedID string
 	}
 
 	pkmn := getPkmn(pkmnID)
 	species := getPkmnSpecies(pkmnID)
 
-	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species}
+	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species, paddedID: leadingZeroes(pkmn.ID, 4)}
 
 	parseTemp("pkmn.html").Execute(w, data)
 
@@ -105,7 +110,7 @@ func main() {
 	sassSource := "./static/scss/App.scss"
 	newCss := "./static/css/style.css"
 	sassBuild := exec.Command("sass", sassSource, newCss, "--no-source-map")
-	
+
 	if err := sassBuild.Run(); err != nil {
 		log.Fatalln("Sass build error:", err)
 	} else {
