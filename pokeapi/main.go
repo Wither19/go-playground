@@ -112,7 +112,7 @@ func main() {
 		log.Fatalln("CSS file creation error:", err)
 	}
 
-	sassCompile, err := libsass.New(newCSS, sassFile)
+	sassCompile, err := libsass.New(os.Stdout, sassFile)
 	if (err != nil) {
 		log.Fatalln("Sass compiler setup error:", err)
 	}
