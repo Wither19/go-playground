@@ -118,6 +118,8 @@ func main() {
 	http.HandleFunc("/", mainPageHandle)
 	http.HandleFunc("/pkmn/{id}", pkmnLoadfunc)
 
+	fmt.Println("Server active")
+
 	http.ListenAndServe(":8080", nil)
 }
 
