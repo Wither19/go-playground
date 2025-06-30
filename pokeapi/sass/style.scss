@@ -16,10 +16,10 @@
 	text-transform: capitalize;
 	text-decoration: none;
 	color: darkblue;
-}
 
-.pkmn-entry:hover {
-	background-color: slateblue;
+	&:hover {
+		background-color: slateblue;
+	}
 }
 
 h1 {

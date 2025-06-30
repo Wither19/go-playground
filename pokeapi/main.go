@@ -7,9 +7,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 
 	"github.com/mtslzr/pokeapi-go/structs"
-	"github.com/wellington/go-libsass"
 )
 
 func parseTemp(f string) *template.Template {
@@ -102,30 +102,18 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	sassFile, err := os.Open("styles/style.scss")
+	sassBuild := exec.Command("sass", "./sass/style.scss", "./styles/style.css", "--no-source-map")
+	err := sassBuild.Run()
+
 	if (err != nil) {
-		log.Fatalln("Sass file open error:", err)
+		log.Fatalln("Sass build error:", err)
 	}
 
-	newCSS, err := os.Create("styles/style.css")
-	if (err != nil) {
-		log.Fatalln("CSS file creation error:", err)
-	}
+	http.Handle("/static/", http.FileServer(http.Dir("./styles")))
 
-	sassCompile, err := libsass.New(os.Stdout, sassFile)
-	if (err != nil) {
-		log.Fatalln("Sass compiler setup error:", err)
-	}
+	http.HandleFunc("/", mainPageHandle)
+	http.HandleFunc("/pkmn/{id}", pkmnLoadfunc)
 
-	if err := sassCompile.Run(); err != nil {
-		log.Fatalln("Sass compile error:", err)
-	}
-
-	// http.Handle("/static/", http.FileServer(http.Dir("./styles")))
-
-	// http.HandleFunc("/", mainPageHandle)
-	// http.HandleFunc("/pkmn/{id}", pkmnLoadfunc)
-
-	// http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", nil)
 }
 
