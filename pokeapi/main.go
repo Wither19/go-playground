@@ -19,13 +19,13 @@ func getAPILink(cat string, id string) string {
 	return fmt.Sprintf("api-data/data/api/v2/%v/%v/index.json", cat, id)
 }
 
-func mainPageHandle(w http.ResponseWriter, r *http.Request) {
+func getNatlDex() structs.Pokedex {
 	dexURL := getAPILink("pokedex", "1")
 
 	dex, err := os.ReadFile(dexURL)
 
 	if (err != nil) {
-		log.Fatalln("Dex error:", err)
+		log.Fatalln("Dex fetch error:", err)
 	}
 
 	var pokedex structs.Pokedex
@@ -33,50 +33,76 @@ func mainPageHandle(w http.ResponseWriter, r *http.Request) {
 	dexUnpackErr := json.Unmarshal(dex, &pokedex)
 
 	if (dexUnpackErr != nil) {
-		log.Fatalln("Dex unpacking error:", err)
+		log.Fatalln("Dex unpack error:", err)
 	}
 
-	parseTemp("main.html").Execute(w, pokedex.PokemonEntries)
+	return pokedex
+}
+
+func getPkmn(id string) structs.Pokemon {
+	pURL := getAPILink("pokemon", id)
+
+	p, pErr := os.ReadFile(pURL)
+
+	if (pErr != nil) {
+		log.Fatalln("Pokemon fetch error:", pErr)
+	}
+
+	var pkmn structs.Pokemon
+
+	pUnpackErr := json.Unmarshal(p, &pkmn)
+
+	if (pUnpackErr != nil) {
+		log.Fatalln("Pokemon unpack error:", pUnpackErr)
+	}
+	return pkmn
+}
+
+func getPkmnSpecies(id string) structs.PokemonSpecies {
+	sURL := getAPILink("pokemon-species", id)
+	
+	s, sErr := os.ReadFile(sURL)
+
+	if (sErr != nil) {
+		log.Fatalln("Species fetch error:", sErr)
+	}
+
+	var species structs.PokemonSpecies
+
+	sUnpackErr := json.Unmarshal(s, &species)
+
+	if (sUnpackErr != nil) {
+		log.Fatalln("Species unpack error:", sUnpackErr)
+	}	
+	return species
+}
+
+func mainPageHandle(w http.ResponseWriter, r *http.Request) {
+	d := getNatlDex().PokemonEntries
+
+	parseTemp("main.html").Execute(w, d)
 }
 
 func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
-	pkmnNum := r.PathValue("num")
+	pkmnID := r.PathValue("id")
 
 	type PkmnData struct {
 		Pokemon structs.Pokemon
 		PokemonSpecies structs.PokemonSpecies
 	}
-	pURL := getAPILink("pokemon", pkmnNum)
 
-	p, pErr := os.ReadFile(pURL)
+	pkmn := getPkmn(pkmnID)
+	species := getPkmnSpecies(pkmnID)
 
-	if (pErr != nil) {
-		log.Fatalln("Pokemon error:", pErr)
-	}
+	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species}
 
-	sURL := getAPILink("pokemon-species", pkmnNum)
-	
-	s, sErr := os.ReadFile(sURL)
-
-	if (sErr != nil) {
-		log.Fatalln("Species error:", sErr)
-	}
-
-	if (pErr == nil && sErr == nil) {
-		data := PkmnData{Pokemon: p, PokemonSpecies: s}
-
-		parseTemp("pkmn.html").Execute(w, data)
-	} else {
-		http.Redirect(w, r, "/home", http.StatusNotFound)
-	}
+	parseTemp("pkmn.html").Execute(w, data)
 
 }
 
 func main() {
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-
 	http.HandleFunc("/home", mainPageHandle)
-	http.HandleFunc("/pkmn/{num}", pkmnLoadfunc)
+	http.HandleFunc("/pkmn/{id}", pkmnLoadfunc)
 
 	http.ListenAndServe(":8080", nil)
 }
