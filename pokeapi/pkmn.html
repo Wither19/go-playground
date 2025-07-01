@@ -28,6 +28,9 @@
 					alt="{{.Pokemon.Name}}"
 					class="artwork shiny" />
 			</div>
+			{{ range $flavor := .FlavorTexts }}
+			<div>{{$flavor.FlavorText}}</div>
+			{{ end }}
 		</div>
 	</body>
 </html>

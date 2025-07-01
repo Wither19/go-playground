@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"slices"
 
 	"github.com/mtslzr/pokeapi-go/structs"
 )
@@ -142,7 +143,8 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	var flavorTexts []FlavorText
+	flavorTexts := []FlavorText{}
+	engFlavors := []FlavorText{}
 
 	omissions := []string{
 		"red", "blue", "yellow", "gold", "silver", "crystal",
@@ -152,7 +154,13 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 	
 	for _, flavorText := range species.FlavorTextEntries {
 		if (flavorText.Language.Name == "en") {
-			append(flavorTexts, flavorText)
+			engFlavors = append(engFlavors, flavorText)
+		}
+	}
+
+	for _, flavorText := range engFlavors {
+		if (!slices.Contains(omissions, flavorText.Version.Name)) {
+			flavorTexts = append(flavorTexts, flavorText)
 		}
 	}
 
