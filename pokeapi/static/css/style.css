@@ -88,13 +88,15 @@ sub {
   background-color: rgb(230, 245, 255);
   text-transform: capitalize;
 }
-.pkmn-list > div.special {
-  background-color: rgb(250, 230, 240);
+.pkmn-list > div:hover {
+  background-color: rgb(150, 130, 220);
 }
-.pkmn-list > div.unique {
-  background-color: rgb(240, 240, 220);
+.pkmn-list > div:hover .pkmn-entry,
+.pkmn-list > div:hover .pkmn-entry:visited {
+  color: whitesmoke;
 }
-.pkmn-list .pkmn-entry, .pkmn-list .pkmn-entry:visited {
+.pkmn-list .pkmn-entry,
+.pkmn-list .pkmn-entry:visited {
   color: darkblue;
   text-decoration: none;
 }
