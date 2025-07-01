@@ -10,7 +10,6 @@ import (
 	"os/exec"
 
 	"github.com/mtslzr/pokeapi-go/structs"
-	"github.com/samber/lo"
 )
 
 func parseTemp(f string) *template.Template {
@@ -33,7 +32,7 @@ func serverSassComp(verbose bool) {
 	if err := sassBuild.Run(); err != nil {
 		log.Fatalln("Sass build error:", err)
 	} else if (verbose) {
-		fmt.Printf("Sass successfully transpiled at %v\n", newCss)
+		fmt.Printf("Sass successfully transpiled to %v\n", newCss)
 	}
 }
 
@@ -118,7 +117,7 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 		Pokemon structs.Pokemon
 		PokemonSpecies structs.PokemonSpecies
 		PaddedID string
-		EnglishGenus Genus
+		EnglishGenus string
 	}
 
 	pkmn := getPkmn(pkmnID)
@@ -127,11 +126,14 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 	paddedID := leadingZeroes(pkmn.ID, 4)
 
 	var engGenus Genus
-	engGenus = lo.PickBy(species.Genera, func(k string, v Genus) bool {
-		return v.Language.Name == "en"
-	})
+	for _, genus := range species.Genera {
+		if genus.Language.Name == "en" {
+			engGenus = genus
+			break
+		}
+	}
 
-	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species, PaddedID: paddedID, EnglishGenus: engGenus}
+	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species, PaddedID: paddedID, EnglishGenus: engGenus.Genus}
 
 	serverSassComp(false)
 
