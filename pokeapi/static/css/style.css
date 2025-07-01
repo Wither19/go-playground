@@ -110,6 +110,11 @@ sub {
   color: goldenrod;
 }
 
+.pkmn-num-header {
+  font-weight: bold;
+}
+
+.pkmn-num-header,
 .pkmn-genus-header {
   text-align: center;
   font-size: 1.1em;
