@@ -27,12 +27,14 @@ func leadingZeroes(num int, length int) string {
 func serverSassComp(verbose bool) {
 	sassSource := "./static/scss/App.scss"
 	newCss := "./static/css/style.css"
-	sassBuild := exec.Command("sass", sassSource, newCss, "--no-source-map")
 
+	sassBuild := exec.Command("sass", sassSource, newCss, "--no-source-map")
 	if err := sassBuild.Run(); err != nil {
 		log.Fatalln("Sass build error:", err)
+
 	} else if (verbose) {
 		fmt.Printf("Sass successfully transpiled to %v\n", newCss)
+
 	}
 }
 
@@ -40,7 +42,6 @@ func getNatlDex() structs.Pokedex {
 	dexURL := getAPILink("pokedex", "1")
 
 	dex, err := os.ReadFile(dexURL)
-
 	if (err != nil) {
 		log.Fatalln("Dex fetch error:", err)
 	}
@@ -48,7 +49,6 @@ func getNatlDex() structs.Pokedex {
 	var pokedex structs.Pokedex
 
 	dexUnpackErr := json.Unmarshal(dex, &pokedex)
-
 	if (dexUnpackErr != nil) {
 		log.Fatalln("Dex unpack error:", err)
 	}
@@ -60,7 +60,6 @@ func getPkmn(id string) structs.Pokemon {
 	pURL := getAPILink("pokemon", id)
 
 	p, pErr := os.ReadFile(pURL)
-
 	if (pErr != nil) {
 		log.Fatalln("Pokemon fetch error:", pErr)
 	}
@@ -68,7 +67,6 @@ func getPkmn(id string) structs.Pokemon {
 	var pkmn structs.Pokemon
 
 	pUnpackErr := json.Unmarshal(p, &pkmn)
-
 	if (pUnpackErr != nil) {
 		log.Fatalln("Pokemon unpack error:", pUnpackErr)
 	}
@@ -79,7 +77,6 @@ func getPkmnSpecies(id string) structs.PokemonSpecies {
 	sURL := getAPILink("pokemon-species", id)
 	
 	s, sErr := os.ReadFile(sURL)
-
 	if (sErr != nil) {
 		log.Fatalln("Species fetch error:", sErr)
 	}
@@ -87,7 +84,6 @@ func getPkmnSpecies(id string) structs.PokemonSpecies {
 	var species structs.PokemonSpecies
 
 	sUnpackErr := json.Unmarshal(s, &species)
-
 	if (sUnpackErr != nil) {
 		log.Fatalln("Species unpack error:", sUnpackErr)
 	}	
@@ -113,11 +109,23 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 		} "json:\"language\""
 	}
 
+	type FlavorText struct {
+		FlavorText string `json:"flavor_text"`
+		Language   struct {
+				Name string `json:"name"`
+				URL  string `json:"url"`
+		} `json:"language"`
+		Version struct {
+				Name string `json:"name"`
+				URL  string `json:"url"`
+		} `json:"version"`
+	}
+
 	type PkmnData struct {
 		Pokemon structs.Pokemon
-		PokemonSpecies structs.PokemonSpecies
 		PaddedID string
 		EnglishGenus string
+		FlavorTexts []FlavorText
 	}
 
 	pkmn := getPkmn(pkmnID)
@@ -126,6 +134,7 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 	paddedID := leadingZeroes(pkmn.ID, 4)
 
 	var engGenus Genus
+
 	for _, genus := range species.Genera {
 		if genus.Language.Name == "en" {
 			engGenus = genus
@@ -133,7 +142,21 @@ func pkmnLoadfunc(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	data := PkmnData{Pokemon: pkmn, PokemonSpecies: species, PaddedID: paddedID, EnglishGenus: engGenus.Genus}
+	var flavorTexts []FlavorText
+
+	omissions := []string{
+		"red", "blue", "yellow", "gold", "silver", "crystal",
+		"ruby", "sapphire", "emerald", "firered", "leafgreen",
+		"diamond", "pearl", "platinum", "heartgold", "soulsilver", "black", "white", "black-2", "white-2",
+	}
+	
+	for _, flavorText := range species.FlavorTextEntries {
+		if (flavorText.Language.Name == "en") {
+			append(flavorTexts, flavorText)
+		}
+	}
+
+	data := PkmnData{Pokemon: pkmn, PaddedID: paddedID, EnglishGenus: engGenus.Genus, FlavorTexts: flavorTexts}
 
 	serverSassComp(false)
 
