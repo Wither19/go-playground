@@ -1,5 +1,15 @@
 @use "sass:map";
 
+@mixin flex-rules($j: "space-evenly", $wr: false) {
+	display: flex;
+
+	@if ($wr) {
+		flex-wrap: wrap;
+	}
+
+	justify-content: $j;
+}
+
 .pokedex-app-container {
 	margin: 24px 3%;
 	display: block;
@@ -10,11 +20,8 @@
 }
 
 .pkmn-list {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
+	@include flex-rules("space-between");
 	margin: 12px auto;
-
 	$card-colors: (
 		"normal": rgb(230, 245, 255),
 		"hover": rgb(150, 130, 220),
