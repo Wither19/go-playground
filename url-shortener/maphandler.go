@@ -12,7 +12,8 @@ import (
 // value is the full URL it is aliased to. If the given request is
 // not using a URL alias, the server will instead load the fallback
 // page containing a list of the aliases.
-func MapHandler(pathsToUrls map[string]string) http.HandlerFunc {
+func MapHandler() http.HandlerFunc {
+	pathsToUrls := yamlParse("paths.yml")
 	s := http.NewServeMux()
 	fallbackTemplate := template.New("index.html").Funcs(sprig.FuncMap())
 

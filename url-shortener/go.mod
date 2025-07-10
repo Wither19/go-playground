@@ -5,7 +5,6 @@ go 1.24.4
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/stretchr/testify v1.10.0
-	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -17,4 +16,5 @@ require (
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	golang.org/x/crypto v0.40.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
