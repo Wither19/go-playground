@@ -15,7 +15,6 @@ import (
 func MapHandler() http.HandlerFunc {
 	pathsToUrls := yamlParse("paths.yml")
 	s := http.NewServeMux()
-	fallbackTemplate := template.New("index.html").Funcs(sprig.FuncMap())
 
 	s.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		shortenedPath := pathsToUrls[r.URL.Path]
@@ -23,7 +22,7 @@ func MapHandler() http.HandlerFunc {
 		if (shortenedPath != "") {
 			http.Redirect(w, r, shortenedPath, http.StatusFound)
 		} else {
-		template.Must(fallbackTemplate.ParseFiles("index.html")).Execute(w, pathsToUrls)
+		template.Must(template.New("index.html").Funcs(sprig.FuncMap()).ParseFiles("index.html")).Execute(w, pathsToUrls)
 		}
 })
 
