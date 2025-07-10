@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		{{ range $key, $val := . }}
-		<div><a href="{{ $key }}">{{ $key }}</a></div>
+		<div><a href="{{ $key }}">{{ $key | strRm "/" }}</a></div>
 		{{ end }}
 	</body>
 </html>

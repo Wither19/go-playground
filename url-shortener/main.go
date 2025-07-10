@@ -8,6 +8,7 @@ func main() {
 	paths := map[string]string{
 		"/urlshort-godoc": "https://godoc.org/github.com/gophercises/urlshort",
 		"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
+		"/gh": 						 "https://github.com",
 	}
 
 	http.ListenAndServe(":8080", MapHandler(paths))
