@@ -1,31 +1,29 @@
-package urlshortener
+package main
 
 import (
-	"maps"
 	"net/http"
-	"slices"
+	"text/template"
 )
 
-func MapHandler(pathsToUrls map[string]string, fallback http.Handler) http.HandlerFunc {
-	//	Keys of the map are the shortened URLs of their values.
-
-	// URL map example from the repo:
-	// paths := map[string]string{
-	// "/urlshort-godoc": "https://godoc.org/github.com/gophercises/urlshort",
-	// "/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
-	// }
+// MapHandler will return an http.HandlerFunc (which also
+// implements http.Handler) that will attempt to map any
+// paths (keys in the map) to their corresponding URL (values
+// that each key in the map points to, in string format).
+// If the path is not provided in the map, then the fallback
+// http.Handler will be called instead.
+func MapHandler(pathsToUrls map[string]string) http.HandlerFunc {
 	
-	keys := slices.Collect(maps.Keys(pathsToUrls))
-
 	s := http.NewServeMux()
 
-	for url, i := range keys {
-		s.HandleFunc(url, func(w http.ResponseWriter, r *http.Request) {
-			http.RedirectHandler()
-		})
-	}
-	
-	
+	  s.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			shortenedPath := pathsToUrls[r.URL.Path]
 
-	return nil
+			if pathExists := shortenedPath != ""; pathExists {
+				http.Redirect(w, r, shortenedPath, http.StatusFound)
+			} else {
+			template.Must(template.ParseFiles("index.html")).Execute(w, pathsToUrls)
+			}
+	})
+
+	return s.ServeHTTP
 }
