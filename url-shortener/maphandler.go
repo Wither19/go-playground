@@ -2,23 +2,19 @@ package main
 
 import (
 	"net/http"
-	"strings"
 	"text/template"
+
+	"github.com/Masterminds/sprig"
 )
 
-// MapHandler will return an http.HandlerFunc (which also
-// implements http.Handler) that will attempt to map any
-// paths (keys in the map) to their corresponding URL (values
-// that each key in the map points to, in string format).
-// If the path is not provided in the map, then the fallback
-// http.Handler will be called instead.
-
-func stringRemove(str string, c string) string {
-	return strings.ReplaceAll(str, c, "")
-}
-
+// pathsToUrls is a string map containing aliases to shorten URL
+// addresses. The key is the shortened link and the corresponding
+// value is the full URL it is aliased to. If the given request is
+// not using a URL alias, the server will instead load the fallback
+// page containing a list of the aliases.
 func MapHandler(pathsToUrls map[string]string) http.HandlerFunc {
 	s := http.NewServeMux()
+	fallbackTemplate := template.New("index.html").Funcs(sprig.FuncMap())
 
 	s.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		shortenedPath := pathsToUrls[r.URL.Path]
@@ -26,9 +22,7 @@ func MapHandler(pathsToUrls map[string]string) http.HandlerFunc {
 		if (shortenedPath != "") {
 			http.Redirect(w, r, shortenedPath, http.StatusFound)
 		} else {
-		template.Must(template.ParseFiles("index.html")).Funcs(template.FuncMap{
-			"strRm": "stringRemove",
-		}).Execute(w, pathsToUrls)
+		template.Must(fallbackTemplate.ParseFiles("index.html")).Execute(w, pathsToUrls)
 		}
 })
 
