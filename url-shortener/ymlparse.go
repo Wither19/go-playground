@@ -7,6 +7,8 @@ import (
 	"github.com/stretchr/testify/assert/yaml"
 )
 
+// Reads YAML file named f and attempts to unmarshal its contents.
+// Parsed YAML must be a string map.
 func yamlParse(f string) map[string]string {
 	var paths map[string]string
 
