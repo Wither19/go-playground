@@ -22,7 +22,10 @@ func MapHandler() http.HandlerFunc {
 		if (shortenedPath != "") {
 			http.Redirect(w, r, shortenedPath, http.StatusFound)
 		} else {
-		template.Must(template.New("index.html").Funcs(sprig.FuncMap()).ParseFiles("index.html")).Execute(w, pathsToUrls)
+			temp := template.New("index.html")
+			temp = temp.Funcs(sprig.FuncMap())
+
+			template.Must(temp.ParseFiles("index.html")).Execute(w, pathsToUrls)
 		}
 })
 
