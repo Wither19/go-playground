@@ -1,39 +1,43 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"strconv"
+
+	"github.com/gotk3/gotk3/gtk"
 )
 
-
 func main() {
+	gtk.Init(nil)
 
-	mainOptions := []string{
-		"Install a package",
-		"Remove a package",
-	}
-
-	var userChoice string
-
-	for i, option := range mainOptions {
-
-		fmt.Printf("%d. %v\n", i + 1, option)
-	}
-
-	fmt.Print("\nWhat would you like to do? [1-4] ")
-	fmt.Scanln(&userChoice)
-
-	choiceNumber, err := strconv.ParseInt(userChoice, 0, 0)
+	window, err := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
 	if err != nil {
-		log.Fatalln("Selected option is not a number")
+		log.Fatalln("Window creation error:", err)
+	}
+	window.SetTitle("Flatpak Helper")
+	window.Connect("destroy", func() {
+		gtk.MainQuit()
+	})
+
+	optionsContainer, err := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 2)
+	if err != nil {
+		log.Fatalln("Box creation error:", err)
 	}
 
-	switch choiceNumber {
-	case 1:
-		pkgInstall()
-	case 2:
-		pkgRemove()
-	} 
+	installBtn, err := gtk.ButtonNewWithLabel("Install a Package")
+	if err != nil {
+		log.Fatalln("Button creation error", err)
+	}
 
+	removeBtn, err := gtk.ButtonNewWithLabel("Remove a Package")
+	if err != nil {
+		log.Fatalln("Button creation error", err)
+	}
+
+	optionsContainer.Add(installBtn)
+	optionsContainer.Add(removeBtn)
+
+	window.Add(optionsContainer)
+
+
+	gtk.Main()
 }
