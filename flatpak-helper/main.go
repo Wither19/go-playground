@@ -42,14 +42,25 @@ func main() {
 		log.Fatalln("Button creation error", err)
 	}
 
-	installBtn.Connect("click", pkgInstall)
+	installBtn.Connect("clicked", pkgInstall)
 
 	removeBtn, err := gtk.ButtonNewWithLabel("Remove a Package")
 	if err != nil {
 		log.Fatalln("Button creation error", err)
 	}
 	
-	removeBtn.Connect("click", pkgRemove)
+	removeBtn.Connect("clicked", func() {
+
+		windowHeaderBar.SetTitle("Select a package to remove")
+
+		packagesList := getPkgList()
+
+		mainContainer.Add(packagesList)
+		packagesList.ShowAll()
+
+		installBtn.Hide()
+		removeBtn.Hide()
+	})
 
 	installBtn.SetHExpand(true)
 	removeBtn.SetHExpand(true)
@@ -69,7 +80,7 @@ func main() {
 
 	window.Add(mainContainer)
 
-	window.SetDefaultSize(800, 600)
+	window.SetDefaultSize(640, 480)
 
 	window.ShowAll()
 
