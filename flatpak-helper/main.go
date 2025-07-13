@@ -18,7 +18,21 @@ func main() {
 		gtk.MainQuit()
 	})
 
-	optionsContainer, err := gtk.BoxNew(gtk.ORIENTATION_HORIZONTAL, 2)
+	mainContainer, err := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
+	if err != nil {
+		log.Fatalln("Main container creation error:", err)
+	}
+
+	windowHeaderBar, err := gtk.HeaderBarNew()
+	if err != nil {
+		log.Fatalln("Header bar creation error:", err)
+	}
+
+	windowHeaderBar.SetTitle("What would you like to do?")
+	
+	mainContainer.Add(windowHeaderBar)
+
+	optionsContainer, err := gtk.BoxNew(gtk.ORIENTATION_VERTICAL, 10)
 	if err != nil {
 		log.Fatalln("Box creation error:", err)
 	}
@@ -28,16 +42,36 @@ func main() {
 		log.Fatalln("Button creation error", err)
 	}
 
+	installBtn.Connect("click", pkgInstall)
+
 	removeBtn, err := gtk.ButtonNewWithLabel("Remove a Package")
 	if err != nil {
 		log.Fatalln("Button creation error", err)
 	}
+	
+	removeBtn.Connect("click", pkgRemove)
+
+	installBtn.SetHExpand(true)
+	removeBtn.SetHExpand(true)
+
+	installBtn.SetMarginTop(20)
+
+	installBtn.SetMarginStart(40)
+	installBtn.SetMarginEnd(40)
+
+	removeBtn.SetMarginStart(40)
+	removeBtn.SetMarginEnd(40)
 
 	optionsContainer.Add(installBtn)
 	optionsContainer.Add(removeBtn)
 
-	window.Add(optionsContainer)
+	mainContainer.Add(optionsContainer)
 
+	window.Add(mainContainer)
+
+	window.SetDefaultSize(800, 600)
+
+	window.ShowAll()
 
 	gtk.Main()
 }
