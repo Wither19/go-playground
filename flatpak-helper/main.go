@@ -42,7 +42,7 @@ func main() {
 		log.Fatalln("Button creation error", err)
 	}
 
-	installBtn.Connect("clicked", pkgInstall)
+	// installBtn.Connect("clicked", pkgInstall)
 
 	removeBtn, err := gtk.ButtonNewWithLabel("Remove a Package")
 	if err != nil {

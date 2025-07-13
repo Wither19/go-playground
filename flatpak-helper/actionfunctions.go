@@ -8,9 +8,9 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 )
 
-func pkgInstall() {
-	log.Fatalln("That feature has not been implemented yet")
-}
+// func pkgInstall() {
+// 	log.Fatalln("That feature has not been implemented yet")
+// }
 
 func getPkgList() *gtk.ScrolledWindow {
 	pkgSlice := sliceFlatpakList(flatpakList("name"))
@@ -121,6 +121,6 @@ func pkgRemove(pkgID string) {
 			gtk.MainQuit()
 		})
 	} else {
-		
+
 	}
 }
