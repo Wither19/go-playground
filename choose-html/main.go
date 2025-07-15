@@ -38,7 +38,7 @@ type Chapter struct {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.RedirectHandler("/intro", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/intro", http.StatusMovedPermanently)
 	})
 
 	for _, chapter := range story {
