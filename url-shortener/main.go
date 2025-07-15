@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	http.ListenAndServe(":8080", MapHandler())
+	http.ListenAndServe(":8080", MapHandler("paths.yml", "index.html"))
 }
