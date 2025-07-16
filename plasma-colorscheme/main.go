@@ -31,11 +31,26 @@ func main() {
 		log.Fatalln("Combo Box Text creation error:", err)
 	}
 
-	for i, colorScheme := range getColorschemeList() {
-		colorSchemeSelect.Append(fmt.Sprintf("colorscheme-%d", i), colorScheme.Name)
+	themeList := getPlasmaColorSchemes(true)
+	activeTheme := getActiveColorScheme()
+
+	for i, colorScheme := range themeList {
+		colorSchemeSelect.Append(fmt.Sprintf("colorscheme-%d", i), colorScheme)
 	}
 
+	themeChangeBtn, err := gtk.ButtonNewWithLabel("Apply")
+	if err != nil {
+		log.Fatalln("Button creation error:", err)
+	}
+
+	colorSchemeSelect.Connect("changed", func() {
+		selectedTheme := colorSchemeSelect.GetActiveText()
+
+		themeChangeBtn.SetSensitive(!(activeTheme == selectedTheme))
+	})
+
 	mainGrid.Attach(colorSchemeSelect, 1, 1, 1, 1)
+	mainGrid.Attach(themeChangeBtn, 6, 6, 2, 1)
 
 	win.Add(mainGrid)
 	win.ShowAll()
