@@ -31,17 +31,19 @@ func sliceFlatpakList(list string) []string {
 
 func pkgRemove(pkgID string) {
 	flatpakRemoveCmd := exec.Command("flatpak", "remove", pkgID, "-y")
-	if err := flatpakRemoveCmd.Start(); err != nil {
-		errorModal, _ := gtk.DialogNew()
+	flatpakRemoveExec, err := flatpakRemoveCmd.CombinedOutput()
 
-		errorModal.SetTitle("Package Removal Failed")
-		errorModal.AddButton("OK", gtk.RESPONSE_OK)
+	removalModal, _ := gtk.DialogNew()
 
-		errorModal.Connect("response", func() {
+	if err != nil {
+		removalModal.SetTitle("Package Removal Failed")
+	} else {
+		removalModal.SetTitle(string(flatpakRemoveExec))
+	}
+		
+		removalModal.AddButton("OK", gtk.RESPONSE_OK)
+
+		removalModal.Connect("response", func() {
 			gtk.MainQuit()
 		})
-	} else {
-
-	}
-	_ = flatpakRemoveCmd.Wait()
 }
