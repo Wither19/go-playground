@@ -11,7 +11,7 @@ import (
 // 	log.Fatalln("That feature has not been implemented yet")
 // }
 
-func getPkgList() *gtk.ScrolledWindow {
+func getPkgList(w *gtk.Window) *gtk.ScrolledWindow {
 	pkgSlice := sliceFlatpakList(flatpakList("name"))
 	pkgIDSlice := sliceFlatpakList(flatpakList("application"))
 
@@ -20,7 +20,7 @@ func getPkgList() *gtk.ScrolledWindow {
 		log.Fatalln("Scrolled Window creation error:", err)
 	}
 
-	pkgListScrolledWindow.SetMinContentHeight(160)
+	pkgListScrolledWindow.SetMinContentHeight(w.GetAllocatedHeight() / 2)
 
 	pkgListBox, err := gtk.FlowBoxNew()
 	if err != nil {

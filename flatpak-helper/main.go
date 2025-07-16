@@ -53,7 +53,7 @@ func main() {
 
 		windowHeaderBar.SetTitle("Select a package to remove")
 
-		packagesList := getPkgList()
+		packagesList := getPkgList(window)
 
 		mainContainer.Add(packagesList)
 		packagesList.ShowAll()
