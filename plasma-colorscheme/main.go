@@ -35,7 +35,7 @@ func main() {
 		colorSchemeSelect.Append(fmt.Sprintf("colorscheme-%d", i), colorScheme.Name)
 	}
 
-	mainGrid.Add(colorSchemeSelect)
+	mainGrid.Attach(colorSchemeSelect, 1, 1, 1, 1)
 
 	win.Add(mainGrid)
 	win.ShowAll()
