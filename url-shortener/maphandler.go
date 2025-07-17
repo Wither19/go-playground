@@ -1,13 +1,13 @@
 package main
 
 import (
+	"html/template"
 	"net/http"
-	"text/template"
 
 	"github.com/Masterminds/sprig"
 )
 
-// pathsToUrls is a string map containing aliases to shorten URL
+// paths is a string map containing aliases to shorten URL
 // addresses. The key is the shortened link and the corresponding
 // value is the full URL it is aliased to. If the given request is
 // not using a URL alias, the server will instead load the fallback
