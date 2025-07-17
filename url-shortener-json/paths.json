@@ -1,0 +1,14 @@
+{
+	"/urlshort-godoc": {
+		"path": "https://godoc.org/github.com/gophercises/urlshort",
+		"htmlHidden": true
+	},
+	"/yaml-godoc": {
+		"path": "https://godoc.org/gopkg.in/yaml.v2",
+		"htmlHidden": false
+	},
+	"/gh": {
+		"path": "https://github.com",
+		"htmlHidden": false
+	}
+}

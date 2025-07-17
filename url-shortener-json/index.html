@@ -9,17 +9,14 @@
 				font-family: sans-serif;
 			}
 
-			a,
-			a:visited {
+			a, a:visited {
 				color: blue;
 			}
 		</style>
 	</head>
 	<body>
-		{{ range $key, $val := . }} {{ if ne $val.HTMLHidden true }}
-		<div>
-			<a href="{{ $key }}">{{ $key | trimAll "/" }}</a>
-		</div>
-		{{ end}} {{ end }}
+		{{ range $key, $val := . }}
+		<div><a href="{{ $key }}">{{ $key | trimAll "/" }}</a></div>
+		{{ end }}
 	</body>
 </html>
