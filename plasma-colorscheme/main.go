@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"strings"
 
 	"github.com/gotk3/gotk3/gtk"
 )
@@ -20,6 +19,10 @@ func main() {
 		gtk.MainQuit()
 	})
 
+	win.SetTitle("Plasma Color Scheme Changer")
+
+
+	win.SetIconName("preferences-color")
 	win.SetDefaultSize(800, 600)
 
 	mainGrid, err := gtk.GridNew()
@@ -55,24 +58,15 @@ func main() {
 		themeChangeBtn.SetSensitive(false)
 	})
 
-	breezeToggleBtn, err := gtk.ButtonNewWithLabel("Light")
+	breezeToggleBtn, err := gtk.ButtonNewWithLabel("Toggle Light / Dark mode")
 	if err != nil {
 		log.Fatalln("Button creation error:", err)
 	}
 
-	if strings.Contains(activeTheme, "light") {
-		breezeToggleBtn.SetLabel("Dark")
-	}
-
 	breezeToggleBtn.Connect("clicked", func() {
 		breezeModeToggle()
-		
-		if strings.Contains(activeTheme, "light") {
-			breezeToggleBtn.SetLabel("Dark")
-		} else {
-			breezeToggleBtn.SetLabel("Light")
-		}
-
+		activeTheme = getActiveColorScheme()
+	
 	})
 
 	mainGrid.Attach(colorSchemeSelect, 0, 0, 1, 1)
