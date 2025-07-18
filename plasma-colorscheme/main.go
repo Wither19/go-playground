@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/gotk3/gotk3/gtk"
 )
@@ -42,15 +43,41 @@ func main() {
 	if err != nil {
 		log.Fatalln("Button creation error:", err)
 	}
+	colorSchemeSelect.SetActive(0)
 
 	colorSchemeSelect.Connect("changed", func() {
-		selectedTheme := colorSchemeSelect.GetActiveText()
-
-		themeChangeBtn.SetSensitive(!(activeTheme == selectedTheme))
+		themeChangeBtn.SetSensitive(!(activeTheme == colorSchemeSelect.GetActiveText()))
 	})
 
-	mainGrid.Attach(colorSchemeSelect, 1, 1, 1, 1)
-	mainGrid.Attach(themeChangeBtn, 6, 6, 2, 1)
+	themeChangeBtn.Connect("clicked", func() {
+		activeTheme = colorSchemeSelect.GetActiveText()
+		plasmaColorSchemeChange(activeTheme)
+		themeChangeBtn.SetSensitive(false)
+	})
+
+	breezeToggleBtn, err := gtk.ButtonNewWithLabel("Light")
+	if err != nil {
+		log.Fatalln("Button creation error:", err)
+	}
+
+	if strings.Contains(activeTheme, "light") {
+		breezeToggleBtn.SetLabel("Dark")
+	}
+
+	breezeToggleBtn.Connect("clicked", func() {
+		breezeModeToggle()
+		
+		if strings.Contains(activeTheme, "light") {
+			breezeToggleBtn.SetLabel("Dark")
+		} else {
+			breezeToggleBtn.SetLabel("Light")
+		}
+
+	})
+
+	mainGrid.Attach(colorSchemeSelect, 0, 0, 1, 1)
+	mainGrid.Attach(themeChangeBtn, 2, 0, 2, 1)
+	mainGrid.Attach(breezeToggleBtn, 0, 2, 1, 1)
 
 	win.Add(mainGrid)
 	win.ShowAll()

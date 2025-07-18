@@ -47,3 +47,25 @@ func getActiveColorScheme() string {
 	return activeColorScheme
 
 }
+
+func plasmaColorSchemeChange(colorScheme string) {
+	changeCmd := exec.Command("plasma-apply-colorscheme", colorScheme)
+
+		if err := changeCmd.Run(); err != nil {
+			log.Fatalln("Plasma color scheme change error:", err)
+		}
+}
+
+func breezeModeToggle() {
+	theme := "BreezeLight"
+	if a := getActiveColorScheme(); strings.Contains(strings.ToLower(a), "light") {
+		theme = "BreezeDark"
+	}
+
+	changeCmd := exec.Command("plasma-apply-colorscheme", theme)
+
+	if err := changeCmd.Run(); err != nil {
+		log.Fatalln("Plasma color scheme change error:", err)
+	}
+
+}
