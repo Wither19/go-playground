@@ -21,9 +21,8 @@ func main() {
 
 	win.SetTitle("Plasma Color Scheme Changer")
 
-
-	win.SetIconName("preferences-color")
-	win.SetDefaultSize(800, 600)
+	win.SetIconName("org.gnome.ColorViewer")
+	win.SetDefaultSize(640, 480)
 
 	mainGrid, err := gtk.GridNew()
 	if err != nil {
@@ -66,7 +65,7 @@ func main() {
 	breezeToggleBtn.Connect("clicked", func() {
 		breezeModeToggle()
 		activeTheme = getActiveColorScheme()
-	
+
 	})
 
 	mainGrid.Attach(colorSchemeSelect, 0, 0, 1, 1)
