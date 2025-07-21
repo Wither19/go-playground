@@ -2,6 +2,7 @@ package main
 
 import (
 	"html/template"
+	"jv/url-shortener/yamlfuncs"
 	"net/http"
 
 	"github.com/Masterminds/sprig"
@@ -13,13 +14,13 @@ import (
 // not using a URL alias, the server will instead load the fallback
 // page containing a list of the aliases.
 func MapHandler(paths string, fallbackPage string) http.HandlerFunc {
-	pathsToUrls := yamlParse(paths)
+	pathsToUrls := yamlfuncs.YamlParse(paths)
 	s := http.NewServeMux()
 
 	s.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		shortenedPath := pathsToUrls[r.URL.Path]
 
-		if (shortenedPath != "") {
+		if shortenedPath != "" {
 			http.Redirect(w, r, shortenedPath, http.StatusFound)
 		} else {
 			temp := template.New("index.html")
@@ -27,7 +28,7 @@ func MapHandler(paths string, fallbackPage string) http.HandlerFunc {
 
 			template.Must(temp.ParseFiles(fallbackPage)).Execute(w, pathsToUrls)
 		}
-})
+	})
 
 	return s.ServeHTTP
 }

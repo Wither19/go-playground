@@ -1,4 +1,4 @@
-package main
+package yamlfuncs
 
 import (
 	"log"
@@ -9,7 +9,7 @@ import (
 
 // Reads YAML file named f and attempts to unmarshal its contents.
 // Parsed YAML must be a string map.
-func yamlParse(f string) map[string]string {
+func YamlParse(f string) map[string]string {
 	var paths map[string]string
 
 	pathYamlFile, err := os.ReadFile(f)
@@ -18,7 +18,7 @@ func yamlParse(f string) map[string]string {
 	}
 
 	if err := yaml.Unmarshal(pathYamlFile, &paths); err != nil {
-		log.Fatalln("YAML file unmarshal error:", err)	
+		log.Fatalln("YAML file unmarshal error:", err)
 	}
 
 	return paths
