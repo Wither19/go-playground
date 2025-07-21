@@ -42,7 +42,15 @@ func main() {
 
 	// The path value is the key that is accessed from the JSON
 	http.HandleFunc("/{chapter}", func(w http.ResponseWriter, r *http.Request) {
-		template.Must(template.ParseFiles("temp.html")).Execute(w, story[r.PathValue("chapter")])
+		chapter := story[r.PathValue("chapter")]
+		var sample Chapter
+
+		if sample.Title == "" {
+			http.Redirect(w, r, "/intro", http.StatusMovedPermanently)
+		} else {
+			template.Must(template.ParseFiles("temp.html")).Execute(w, chapter)
+		}
+
 	})
 
 	http.ListenAndServe(":8080", nil)
